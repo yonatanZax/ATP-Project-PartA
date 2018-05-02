@@ -1,5 +1,6 @@
 package algorithms.mazeGenerators;
 
+
 /**
  * An abstract class that represents a generator for mazes.
  * each class the inherit this class will need to implement the method 'generate' with an algorithm that generate a maze.
