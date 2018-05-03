@@ -42,7 +42,7 @@ public class Position
 		if(copiedPosition != null) {
 			row = copiedPosition.row;
 			col = copiedPosition.col;
-			parent = copiedPosition.parent;
+			//parent = copiedPosition.parent;
 		}
 	}
 

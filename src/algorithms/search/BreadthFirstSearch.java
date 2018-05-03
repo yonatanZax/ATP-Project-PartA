@@ -51,7 +51,6 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
 
 		while (!stateQueue.isEmpty()) {
 
-
 			AState currentState = popOpenList();
 			//visited.add((Integer)currentState.hashCode());
 
@@ -62,7 +61,6 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
 			for (AState neighbour : neighboursList) {
 				if (!visited.contains(neighbour.hashCode())){
 					stateQueue.add(neighbour);
-
 					visited.add(neighbour.hashCode());
 				}
 			}
@@ -70,44 +68,8 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
 		return result;
 	}
 
-
-
 	public String getName(){
 		return "Breadth First Search";
-	}
-
-
-
-	public static void main(String[] args) {
-		char[][] map = {{'S','1','0','1','1'},
-				        {'0','1','0','0','1'},
-				        {'0','1','0','1','1'},
-				        {'0','0','0','0','1'},
-				        {'1','1','1','E','1'},
-				        {'0','0','0','1','1'}};
-		try {
-			Maze maze = new Maze(map, new Position(0, 0, null), new Position(4, 3, null));
-		}catch (Exception e){}
-		MyMazeGenerator mg = new MyMazeGenerator();
-		Maze maze2 = mg.generate(1000,1000);
-		ISearchable searchableMaze = new SearchableMaze(maze2);
-
-	//	DepthFirstSearch dfs = new DepthFirstSearch();
-	//	Solution solution2 = dfs.solve(searchableMaze);
-	//	System.out.println(solution2);
-	//	System.out.println(dfs.getNumberOfNodesEvaluated() + '\n');
-
-		BreadthFirstSearch bfs = new BreadthFirstSearch();
-		//maze2.print();
-		Solution solution = bfs.solve(searchableMaze);
-		//maze.print();
-		//System.out.println(solution);
-        System.out.println(bfs.getNumberOfNodesEvaluated() + "\n");
-
-        BestFirstSearch BestFS = new BestFirstSearch();
-        Solution solution1 = BestFS.solve(searchableMaze);
-        //System.out.println(solution1);
-        System.out.println(BestFS.getNumberOfNodesEvaluated());
 	}
 
 }

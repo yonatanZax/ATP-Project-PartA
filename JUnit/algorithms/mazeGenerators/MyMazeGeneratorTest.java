@@ -41,7 +41,7 @@ class MyMazeGeneratorTest {
         test = successes == rounds;
         if (test){
             System.out.println("MyMazeGen RunTime test Passed!");
-            System.out.println("Avg RunTime: "+ avgTime/rounds + " Milisec.");
+            System.out.println("\t" + "Avg RunTime: "+ avgTime/rounds + " Milisec.");
         }
         assertTrue(test);
     }

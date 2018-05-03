@@ -56,7 +56,10 @@ public class MyMazeGenerator extends AMazeGenerator
 			// If algorithm has resolved, mark end node
 			if (frontier.isEmpty()) {
 				maz[last.getRowIndex()][last.getColumnIndex()] = 'E';
-				goalPosition = new Position(last.getRowIndex(), last.getColumnIndex(), last.getParent());
+				//TODO - remove parent
+
+				//goalPosition = new Position(last.getRowIndex(), last.getColumnIndex(), last.getParent());
+				goalPosition = new Position(last.getRowIndex(), last.getColumnIndex());
 			}
 		}
 
