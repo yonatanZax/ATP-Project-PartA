@@ -45,7 +45,7 @@ public class SearchableMaze implements ISearchable
 
 
 	public ArrayList<AState> getAllPossibleStates(AState currentState) {
-		if (!(currentState instanceof MazeState) || currentState == null){
+		if (currentState == null ||!(currentState instanceof MazeState)){
 			return null;
 		}
 		ArrayList<AState> list = new ArrayList<AState>();
@@ -61,26 +61,14 @@ public class SearchableMaze implements ISearchable
 				if (x != 0 && y != 0) { // slant
 					if (mazeCharCheck(curRow + x,curCol + y)) // checks if its a wall if so wont take it
 						if (mazeCharCheck(curRow ,curCol + y)){ // checks if at the same row we have 0
-							//TODO - remove
-							//list.add(new MazeState(curWeigh + 15,new Position(curRow + x, curCol + y, curPos)));
-							list.add(new MazeState(curWeigh + 15,new Position(curRow + x, curCol + y, curPos),currentState));
-							continue;
+							list.add(new MazeState(curWeigh + 15,new Position(curRow + x, curCol + y, curPos),curMazeState));
 						}
 						else if (mazeCharCheck(curRow + x,curCol)){ // checks if at the same col we have 0
-							//TODO - remove
-							//list.add(new MazeState(curWeigh + 15,new Position(curRow + x, curCol + y, curPos)));
-							list.add(new MazeState(curWeigh + 15,new Position(curRow + x, curCol + y, curPos),currentState));
-
-							continue;
-						}
-						else{
-							continue;
+							list.add(new MazeState(curWeigh + 15,new Position(curRow + x, curCol + y, curPos),curMazeState));
 						}
 				}
 				else if(mazeCharCheck(curRow + x,curCol + y)) // if its not slant, same location and it have '0'
-					//TODO - remove
-					//list.add(new MazeState(curWeigh + 10,new Position(curRow + x, curCol + y, curPos)));
-					list.add(new MazeState(curWeigh + 10,new Position(curRow + x, curCol + y, curPos),currentState));
+					list.add(new MazeState(curWeigh + 10,new Position(curRow + x, curCol + y, curPos),curMazeState));
 			}
 		}
 		return list;

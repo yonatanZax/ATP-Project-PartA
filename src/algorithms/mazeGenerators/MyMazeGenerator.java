@@ -56,9 +56,6 @@ public class MyMazeGenerator extends AMazeGenerator
 			// If algorithm has resolved, mark end node
 			if (frontier.isEmpty()) {
 				maz[last.getRowIndex()][last.getColumnIndex()] = 'E';
-				//TODO - remove parent
-
-				//goalPosition = new Position(last.getRowIndex(), last.getColumnIndex(), last.getParent());
 				goalPosition = new Position(last.getRowIndex(), last.getColumnIndex());
 			}
 		}
@@ -85,8 +82,16 @@ public class MyMazeGenerator extends AMazeGenerator
 			}
 	}
 
-
-	public Position opposite(Position p) {
+	/**
+	 *     [1][a][1]
+	 *     [1][b][1]
+	 *     [1][c][1]
+	 *     In this example:
+	 *     'c' is the Parent of 'b'
+	 *     => 'a' is the Opposite of 'b'
+	 *     "Opposite from the Parent's side"
+	 */
+	private Position opposite(Position p) {
 		if(p != null && p.getParent() != null) {
 			if (p.getRowIndex().compareTo(p.getParent().getRowIndex()) != 0)
 				return new Position(p.getRowIndex() + p.getRowIndex().compareTo(p.getParent().getRowIndex()), p.getColumnIndex(), p);

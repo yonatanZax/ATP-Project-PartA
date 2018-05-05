@@ -79,23 +79,5 @@ public class DepthFirstSearch extends ASearchingAlgorithm
 		return "Depth First Search";
 	}
 
-
-	public static void main(String[] args) {
-		char[][] map = {{'S','1','0','1','1'},
-						{'0','1','0','0','1'},
-						{'0','1','0','1','1'},
-						{'0','0','0','0','1'},
-						{'1','1','1','E','1'},
-						{'0','0','0','1','1'}};
-		String[] check = {"{0,0}" ,"{1,0}", "{2,0}"};
-		try {
-			Maze maze = new Maze(map, new Position(0, 0, null), new Position(4, 3, null));
-			ISearchable searchableMaze = new SearchableMaze(maze);
-			DepthFirstSearch dfs = new DepthFirstSearch();
-			Solution solution = dfs.solve(searchableMaze);
-			System.out.println(solution);
-			System.out.println("Nodes Visited: " + dfs.getNumberOfNodesEvaluated());
-		}catch (Exception e){}
-	}
 }
 
