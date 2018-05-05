@@ -23,8 +23,8 @@ public class SearchableMaze implements ISearchable
 	 */
 	public SearchableMaze(Maze maze){
 		this.maze = maze;
-		startState = new MazeState(maze.getStartPosition());
-		goalState = new MazeState(maze.getGoalPosition());
+		startState = new MazeState(maze.getStartPosition(),null);
+		goalState = new MazeState(maze.getGoalPosition(),null);
 	}
 
 /*
@@ -61,11 +61,11 @@ public class SearchableMaze implements ISearchable
 				if (x != 0 && y != 0) { // slant
 					if (mazeCharCheck(curRow + x,curCol + y)) // checks if its a wall if so wont take it
 						if (mazeCharCheck(curRow ,curCol + y)){ // checks if at the same row we have 0
-							list.add(new MazeState(curWeigh + 15,new Position(curRow + x, curCol + y, curPos)));
+							list.add(new MazeState(curWeigh + 15,new Position(curRow + x, curCol + y, curPos),curMazeState));
 							continue;
 						}
 						else if (mazeCharCheck(curRow + x,curCol)){ // checks if at the same col we have 0
-							list.add(new MazeState(curWeigh + 15,new Position(curRow + x, curCol + y, curPos)));
+							list.add(new MazeState(curWeigh + 15,new Position(curRow + x, curCol + y, curPos),curMazeState));
 							continue;
 						}
 						else{
@@ -73,7 +73,7 @@ public class SearchableMaze implements ISearchable
 						}
 				}
 				else if(mazeCharCheck(curRow + x,curCol + y)) // if its not slant, same location and it have '0'
-					list.add(new MazeState(curWeigh + 10,new Position(curRow + x, curCol + y, curPos)));
+					list.add(new MazeState(curWeigh + 10,new Position(curRow + x, curCol + y, curPos),curMazeState));
 			}
 		}
 		return list;

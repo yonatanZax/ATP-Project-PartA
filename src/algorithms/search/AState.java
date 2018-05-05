@@ -8,13 +8,23 @@ public abstract class AState
 	// Weight is used to allow Priority Queue
 	private int weight;
 	protected String stateString;
+	private AState parent;
 
 	/**
 	 * Constructor with no use of weight, sets the weight as 0.
 	 */
+	/*
 	public AState(String s){
 		weight = 0;
 		stateString = s;
+	}
+	TODO remove if works
+	*/
+
+	public AState(String s,AState p){
+		weight = 0;
+		stateString = s;
+		parent = p;
 	}
 
 	/**
@@ -22,9 +32,16 @@ public abstract class AState
 	 * Constructor with the use of weight, sets the weight as w.
 	 * @param w The cost of moving from a neighbor state to this state.
 	 */
-	public AState(String s,int w){
+/*	public AState(String s,int w){
 		weight = w;
 		stateString = s;
+	}
+	TODO remove if works
+*/
+	public AState(String s,int w,AState p){
+		weight = w;
+		stateString = s;
+		parent = p;
 	}
 
 	/**
@@ -51,13 +68,17 @@ public abstract class AState
 	 * Makes a String representing this state.
 	 * @return A String representing this state.
 	 */
-	public abstract String toString();
+	public String toString(){
+		return stateString;
+	}
 
 	/**
 	 * Gets the state which we got to this state from.
 	 * @return The 'AState' we got to this state from.
 	 */
-	public abstract AState getPredecessor();
+	public AState getPredecessor(){
+		return  parent;
+	}
 
 	/**
 	 * Gets the cost of the moving to this state.
