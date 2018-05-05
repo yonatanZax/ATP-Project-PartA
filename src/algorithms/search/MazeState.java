@@ -31,8 +31,6 @@ public class MazeState extends AState {
 	 * Copy Constructor.
 	 * @param other The MazeState we wish to copy.
 	 */
-
-
 	public MazeState(MazeState other) {
 		super(other.toString(), other.getWeight(),other.getPredecessor());
 		position = new Position(other.position);

@@ -7,20 +7,12 @@ public abstract class AState
 {
 	// Weight is used to allow Priority Queue
 	private int weight;
-	protected String stateString;
+	private String stateString;
 	private AState parent;
 
 	/**
 	 * Constructor with no use of weight, sets the weight as 0.
 	 */
-	/*
-	public AState(String s){
-		weight = 0;
-		stateString = s;
-	}
-	TODO remove if works
-	*/
-
 	public AState(String s,AState p){
 		weight = 0;
 		stateString = s;
@@ -32,12 +24,6 @@ public abstract class AState
 	 * Constructor with the use of weight, sets the weight as w.
 	 * @param w The cost of moving from a neighbor state to this state.
 	 */
-/*	public AState(String s,int w){
-		weight = w;
-		stateString = s;
-	}
-	TODO remove if works
-*/
 	public AState(String s,int w,AState p){
 		weight = w;
 		stateString = s;
@@ -50,7 +36,7 @@ public abstract class AState
 	 * @return true if they represents the same state, false otherwise.
 	 */
 	public boolean equals(Object aState) {
-		if (aState != null) {
+		if (aState != null && (aState instanceof  AState)) {
 			return stateString.equals(aState.toString());
 		}
 		return false;
@@ -58,7 +44,6 @@ public abstract class AState
 
 	/**
 	 * Returns a unique int representing this AState in the given problem.
-	 * @return
 	 */
 	public int hashCode() {
 		return stateString.hashCode();

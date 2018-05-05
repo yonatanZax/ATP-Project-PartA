@@ -5,11 +5,7 @@ import java.util.Random;
 
 public class SimpleMazeGenerator extends AMazeGenerator
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
+
 	public SimpleMazeGenerator(){
 		super();
 	}
@@ -87,11 +83,8 @@ public class SimpleMazeGenerator extends AMazeGenerator
 
 
 	/**
-	 * <!-- begin-user-doc -->
 	 *     This method receives a number "m"
 	 *     It builds a random binary number of '0's and '1's
-	 * <!--  end-user-doc  -->
-	 * @generated
 	 */
 	private static String randomBinnaryString(int m) {
 		Random rg = new Random();

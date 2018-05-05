@@ -1,6 +1,8 @@
 package algorithms.mazeGenerators;
 
 
+import com.sun.istack.internal.NotNull;
+
 /**
  * Represent a location in a 2D dimension of ints
  *
@@ -42,32 +44,15 @@ public class Position
 		if(copiedPosition != null) {
 			row = copiedPosition.row;
 			col = copiedPosition.col;
-			//parent = copiedPosition.parent;
+			parent = copiedPosition.parent;
 		}
 	}
 
-	/**
-	 *     [1][a][1]
-	 *     [1][b][1]
-	 *     [1][c][1]
-	 *     In this example:
-	 *     'c' is the Parent of 'b'
-	 *     => 'a' is the Opposite of 'b'
-	 *     "Opposite from the Parent's side"
-	 */
-/*
-	public Position opposite() {
-		if (this.row.compareTo(parent.row) != 0)
-			return new Position(this.row + this.row.compareTo(parent.row), this.col, this);
-		if (this.col.compareTo(parent.col) != 0)
-			return new Position(this.row, this.col + this.col.compareTo(parent.col), this);
-		return null;
-	}
-*/
 	/*** Getters ***/
+    @NotNull
+	public Integer getRowIndex(){	return row;	}
 
-	public Integer getRowIndex() {	return row;	}
-
+    @NotNull
 	public Integer getColumnIndex() {
 		return col;
 	}
@@ -90,12 +75,11 @@ public class Position
 	//** Equals and HashCode **
 	@Override
 	public boolean equals(Object other){
-		if (!(other instanceof  Position) || other == null)
+		if (other == null || !(other instanceof  Position))
 			return false;
 		Position position = (Position)other;
-		if (position.getRowIndex() == row && position.getColumnIndex()==col)
-			return true;
-		return false;
+		return (position.getRowIndex().equals(row) && position.getColumnIndex().equals(col));
+
 	}
 
 	@Override

@@ -7,9 +7,6 @@ package algorithms.mazeGenerators;
 public abstract class AMazeGenerator implements IMazeGenerator
 {
 
-	public AMazeGenerator(){
-	}
-
 	/**
 	 * Creates a Maze and return it.
 	 * @param rows  the number of rows the maze will have.
