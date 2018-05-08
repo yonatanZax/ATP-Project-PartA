@@ -1,6 +1,7 @@
 package algorithms.mazeGenerators;
 
 
+import com.sun.istack.internal.NotNull;
 
 /**
  * Represent a location in a 2D dimension of ints
@@ -48,8 +49,10 @@ public class Position
 	}
 
 	/*** Getters ***/
+    @NotNull
 	public Integer getRowIndex(){	return row;	}
 
+    @NotNull
 	public Integer getColumnIndex() {
 		return col;
 	}
