@@ -38,31 +38,32 @@ public class Maze
      * default content start with 0
      * seperated with "-" in the big string
      * seperated with "," in the index's
-     * Size = stringArr[0] - row,col
-     * start = stringArr[1] - row,col
-     * Goal = stringArr[2] - row,col
-     * Maze = stringArr[3] - #,#,#,#,
+     * Size = (numOfBytes),mazeRow,(numOfBytes),mazeCol
+     * start = (numOfBytes),startRow,(numOfBytes),startCol
+     * Goal = (numOfBytes),goalRow,(numOfBytes),goalCol
+     * Beginning of String example = "3,255,255,90,   3,255,255,90,  1,15,1,0,  3,255,245,1,240
+     * Maze = byteMaze[3] - #,#,#,#,
      * @return
      */
     public Maze(byte[] byteMaze){
-        String byteMazeString = new String(byteMaze);
-        String[] stringArr = byteMazeString.split("-");
-        String[] stringSize = stringArr[0].split(",");
-        String[] stringStart = stringArr[1].split(",");
-        String[] stringGoal = stringArr[2].split(",");
-        String[] stringMaze = stringArr[3].split(",");
+        String[] stringArr = new String[byteMaze.length];
+        for (int i=0 ; i< byteMaze.length ; i++){
+            stringArr[i] = String.valueOf(byteMaze[i]);
+        }
+        int[] initMazeSizes = getCompressedMazeValues(stringArr);
 
-        startPostion = new Position(Integer.valueOf(stringStart[0]),Integer.valueOf(stringStart[1]));
-        goalPosition = new Position(Integer.valueOf(stringGoal[0]),Integer.valueOf(stringGoal[1]));
-        map = new char[Integer.valueOf(stringSize[0])][Integer.valueOf(stringSize[1])];
+        map = new char[Integer.valueOf(initMazeSizes[0])][Integer.valueOf(initMazeSizes[1])];
+        startPostion = new Position(Integer.valueOf(initMazeSizes[2]),Integer.valueOf(initMazeSizes[3]));
+        goalPosition = new Position(Integer.valueOf(initMazeSizes[4]),Integer.valueOf(initMazeSizes[5]));
+        int mazeFirstValue = initMazeSizes[6];
 
         char curChar = '0';
         int indexInStringMaze = 1;
-        int numberFromStringMaze = Integer.valueOf(stringMaze[0]);
+        int numberFromStringMaze = Integer.valueOf(stringArr[0+mazeFirstValue]);
         for(int i=0 ; i< map.length ; i++){
             for (int j = 0; j < map[0].length; j ++){
-                while (numberFromStringMaze == 0 && indexInStringMaze < stringMaze.length){
-                    numberFromStringMaze = Integer.valueOf(stringMaze[indexInStringMaze]);
+                while (numberFromStringMaze == 0 && indexInStringMaze < stringArr.length){
+                    numberFromStringMaze = Integer.valueOf(stringArr[indexInStringMaze]);
                     indexInStringMaze++;
                     curChar = ((curChar == '0') ? '1': '0');
                 }
@@ -72,6 +73,38 @@ public class Maze
         }
         map[startPostion.getRowIndex()][startPostion.getColumnIndex()] = 'S';
         map[goalPosition.getRowIndex()][goalPosition.getColumnIndex()] = 'E';
+    }
+
+
+    /**
+     * Makes an array of Coordinates from the longString
+     "2,255,45,2,255,45,1,150,1,0,2,255,30,1,50,0,1,1,0,1,0..."
+     result = {300,300,150,0,285,50,15}
+     Size = result[0]*result[1] = 300*300
+     Start = (result[2],result[3]) = (150,0)
+     Goal = (result[4],result[5]) = (285,50)
+     Maze starting index = result[6] = 15
+     * @param longString
+     * @return
+     */
+    private int[] getCompressedMazeValues(String[] longString){
+        int[] result = new int[7];
+        int curIndex = 0;
+        int nextIndex = 0;
+        int sum =0;
+        int stringIndex =0;
+        while(stringIndex<6){
+            nextIndex += Integer.valueOf(longString[curIndex]) + 1;
+            curIndex++;
+            for (int i=curIndex; i<nextIndex ; i++){
+                sum += Integer.valueOf(longString[i]);
+            }
+            curIndex = nextIndex;
+            result[stringIndex] = sum;
+            sum = 0; stringIndex++;
+        }
+        result[6] = nextIndex;
+        return result;
     }
 
     /*** Getters ***/
@@ -158,39 +191,74 @@ public class Maze
         return true;
     }
 
+
+    //ToDo - toByteArray method
     /**
      * default content start with 0
-     * seperated with "-" in the big string
-     * seperated with "," in the index's
-     * Size = stringArr[0] - row,col
-     * start = stringArr[1] - row,col
-     * Goal = stringArr[2] - row,col
-     * Maze = stringArr[3] - #,#,#,#,
-     * example - "10,20-5,6-9,4-1,3,5,3,6,8,2"
+     * Size = (numOfBytes),mazeRow,(numOfBytes),mazeCol
+     * start = (numOfBytes),startRow,(numOfBytes),startCol
+     * Goal = (numOfBytes),goalRow,(numOfBytes),goalCol
+     * Beginning of String example = "3,255,255,90,   3,255,255,90,  1,15,1,0,  3,255,245,1,240
+     * Maze = (After all the mazeCompressedCoordinates),#,#,#,#,
+     * example -
      * @return
      */
     public byte[] toByteArray(){
+        String s = getCompressedCoordinates(600);
         String byteString = "";
-        byteString = map.length + "," + map[0].length + "-";
-        byteString += startPostion.getRowIndex() + "," + startPostion.getColumnIndex() + "-";
-        byteString += goalPosition.getRowIndex() + "," + goalPosition.getColumnIndex() + "-";
+        byteString = getCompressedCoordinates(map.length) + "," + getCompressedCoordinates(map[0].length) + ",";
+        byteString += getCompressedCoordinates(startPostion.getRowIndex()) + "," + getCompressedCoordinates(startPostion.getColumnIndex()) + ",";
+        byteString += getCompressedCoordinates(goalPosition.getRowIndex()) + "," + getCompressedCoordinates(goalPosition.getColumnIndex()) + ",";
         byteString += generateMazeString();
-        byte[] byteArr = byteString.getBytes();
+        String[] splited = byteString.split(",");
+
+        byte[] byteArr = new byte[splited.length];
+        for (int i=0; i<splited.length ; i++){
+            String temp = String.valueOf(Integer.valueOf(splited[i])-128);
+            byteArr[i] = Byte.valueOf(temp);
+        }
         return byteArr;
     }
 
+    // Makes a string with a comma separator from char[]
+    private String joinString(char[] row){
+        String result = "";
+        for (char c : row) {
+            result += String.valueOf(c) + ',';
+        }
+        return result.substring(0,result.length()-1);
+    }
+
+    // Makes numbers to a compressed String, Example:
+    // 300 = "255,45"
+    private String getCompressedCoordinates(int n){
+        String result = "";
+        while(n>255){
+            result += "255,";
+            n -= 255;
+        }
+        result += String.valueOf(n);
+        String[] arr = result.split(",");
+        return arr.length +"," + result;
+    }
+
+    //Makes a long String from a char[][] maze
     private String generateMazeString() {
         String longString = "";
         for (int i = 0; i < map.length; i++){
-            longString += String.valueOf(map[i]);
+            String temp = joinString(map[i]);
+            longString += temp;
         }
-        String compressedMazeString = "";
-        char curNumber = '0';
-        int counter = 0;
+        //String compressedMazeString = "";
+        //char curNumber = '0';
+        //int counter = 0;
         longString = longString.replace('E','0' );
         longString = longString.replace('S','0' );
 
-        for (int i = 0; i < longString.length(); i ++){
+
+
+        // Old compress
+        /*for (int i = 0; i < longString.length(); i ++){
             if (curNumber == longString.charAt(i)){
                 counter++;
             }
@@ -203,6 +271,8 @@ public class Maze
         }
         compressedMazeString += counter;
         return compressedMazeString;
+        */
+        return longString;
     }
 
     private boolean equals(Maze maze2){
@@ -214,7 +284,7 @@ public class Maze
         }
         return true;
     }
-/*
+
     public static void main(String[] args) {
         char[][] map = {{'S','1','0','1','1'},
                         {'0','1','1','0','1'},
@@ -222,11 +292,14 @@ public class Maze
                         {'0','0','0','0','1'},
                         {'0','0','1','E','1'},
                         {'0','0','0','1','1'}};
+
+
         Maze maze;
         Maze maze2;
         MyMazeGenerator mg = new MyMazeGenerator();
         try {
             maze = mg.generate(1000,1000 );
+            //maze.print();
             maze2 = new Maze(maze.toByteArray());
             System.out.println(maze.equals(maze2));
         }catch (Exception e){
@@ -234,6 +307,6 @@ public class Maze
         }
 
 
-    }*/
+    }
 }
 
