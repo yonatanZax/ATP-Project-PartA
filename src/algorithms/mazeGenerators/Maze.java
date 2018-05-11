@@ -57,18 +57,13 @@ public class Maze
         goalPosition = new Position(Integer.valueOf(initMazeSizes[4]),Integer.valueOf(initMazeSizes[5]));
         int mazeFirstValue = initMazeSizes[6];
 
-        char curChar = '0';
-        int indexInStringMaze = 1;
-        int numberFromStringMaze = Integer.valueOf(stringArr[0+mazeFirstValue]);
-        for(int i=0 ; i< map.length ; i++){
-            for (int j = 0; j < map[0].length; j ++){
-                while (numberFromStringMaze == 0 && indexInStringMaze < stringArr.length){
-                    numberFromStringMaze = Integer.valueOf(stringArr[indexInStringMaze]);
-                    indexInStringMaze++;
-                    curChar = ((curChar == '0') ? '1': '0');
-                }
-                map[i][j] = curChar;
-                numberFromStringMaze--;
+
+        //Todo - implement Roy
+        int indexInByteMaze = mazeFirstValue;
+        for(int i = 0 ; i< map.length ; i++){
+            for (int j = 0; j < map[0].length; j++){
+                map[i][j] = stringArr[indexInByteMaze].charAt(0);
+                indexInByteMaze++;
             }
         }
         map[startPostion.getRowIndex()][startPostion.getColumnIndex()] = 'S';
@@ -94,14 +89,15 @@ public class Maze
         int sum =0;
         int stringIndex =0;
         while(stringIndex<6){
-            nextIndex += Integer.valueOf(longString[curIndex]) + 1;
+            nextIndex += Short.valueOf(longString[curIndex]) + 1;
             curIndex++;
             for (int i=curIndex; i<nextIndex ; i++){
-                sum += Integer.valueOf(longString[i]);
+                sum += Short.valueOf(longString[i]) & 0xff;
             }
             curIndex = nextIndex;
             result[stringIndex] = sum;
-            sum = 0; stringIndex++;
+            sum = 0;
+            stringIndex++;
         }
         result[6] = nextIndex;
         return result;
@@ -214,8 +210,10 @@ public class Maze
 
         byte[] byteArr = new byte[splited.length];
         for (int i=0; i<splited.length ; i++){
-            String temp = String.valueOf(Integer.valueOf(splited[i])-128);
-            byteArr[i] = Byte.valueOf(temp);
+            //ToDo -
+            //String temp = String.valueOf(Integer.valueOf(splited[i])-128);
+            String temp = String.valueOf(Integer.valueOf(splited[i]));
+            byteArr[i] = (byte)(int)Integer.valueOf(temp);
         }
         return byteArr;
     }
@@ -226,7 +224,7 @@ public class Maze
         for (char c : row) {
             result += String.valueOf(c) + ',';
         }
-        return result.substring(0,result.length()-1);
+        return result.substring(0,result.length());
     }
 
     // Makes numbers to a compressed String, Example:
@@ -272,7 +270,7 @@ public class Maze
         compressedMazeString += counter;
         return compressedMazeString;
         */
-        return longString;
+        return longString.substring(0,longString.length()-1);
     }
 
     private boolean equals(Maze maze2){

@@ -1,36 +1,81 @@
 package IO;
 
+import jdk.jfr.Unsigned;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 public class MyDecompressorInputStream extends InputStream {
 
-    InputStream in;
+    private InputStream in;
+    private int values;
+    private int next;
+    private int curValue;
+    private boolean valuesFlag;
+    private boolean writeFlag;
+    private int counter;
 
     public MyDecompressorInputStream(InputStream in) {
         this.in = in;
+        values = 6;
+        next = 0;
+        curValue = 0;
+        counter=0;
+        valuesFlag = false;
+        writeFlag = false;
     }
+
+
 
     @Override
     public int read() throws IOException {
-        int i1 = in.read();
-        System.out.println(in.read());
-        int i2 = in.read();
-        System.out.println(in.read());
-        int i3 = in.read();
-        int i4 = in.read();
-        int i5 = in.read();
-        int i6 = in.read();
-        int i7 = in.read();
-        int i8 = in.read();
-        int i9 = in.read();
-        int i10 = in.read();
-        int i11 = in.read();
-        int i12 = in.read();
-        int i13 = in.read();
-        int i14 = in.read();
-        int i15 = in.read();
-        int i16 = in.read();
-        return in.read();
+        while (!valuesFlag){
+            int temp = curValue;
+            if (values>=0) {
+                if (next == 0){
+                    next = in.read();
+                    values--;
+                    return next;
+                }
+                else {
+                    if (next > 0){
+                        curValue = in.read();
+                        next--;
+                        temp = curValue;
+                        if (values==0 && next==0){
+                            values--;
+                            temp = curValue;
+                            curValue=0;
+                            valuesFlag = true;
+                        }
+                        return temp;
+                    }
+                }
+            }
+        }
+
+        if (!writeFlag){
+            counter = in.read();
+            if (counter==-1)
+                return curValue;
+            if (counter==0){
+                counter = in.read();
+                curValue = ((curValue == 1) ? 0: 1);
+
+            }
+            writeFlag = true;
+        }
+
+        if (counter>1){
+            counter--;
+            return curValue;
+        }
+        writeFlag = false;
+        counter--;
+
+
+        int temp = curValue;
+        curValue = ((curValue == 1) ? 0: 1);
+        return temp;
     }
 }

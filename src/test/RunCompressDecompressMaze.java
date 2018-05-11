@@ -15,9 +15,8 @@ import java.util.Arrays;
 public class RunCompressDecompressMaze {
     public static void main(String[] args) {
         String mazeFileName = "savedMaze.maze";
-        //String mazeFileName = "savedMaze.text";
         AMazeGenerator mazeGenerator = new MyMazeGenerator();
-        Maze maze = mazeGenerator.generate(300, 300); //Generate new maze
+        Maze maze = mazeGenerator.generate(600, 600); //Generate new maze
 
         try {
             // save maze to a file
@@ -41,7 +40,17 @@ public class RunCompressDecompressMaze {
         }
 
         Maze loadedMaze = new Maze(savedMazeBytes);
-        boolean areMazesEquals = Arrays.equals(loadedMaze.toByteArray(),maze.toByteArray());
+        byte[] loadedMazeBytes = loadedMaze.toByteArray();
+        byte[] mazeBytes = maze.toByteArray();
+        boolean test = true;
+        for (int i=0; i< loadedMazeBytes.length ; i++){
+            byte b1 = loadedMazeBytes[i];
+            byte b2 = mazeBytes[i];
+            if (b1!=b2)
+                test = false;
+        }
+
+        boolean areMazesEquals = Arrays.equals(loadedMazeBytes,mazeBytes);
         System.out.println(String.format("Mazes equal: %s",areMazesEquals)); //maze should be equal to loadedMaze
     }
 }

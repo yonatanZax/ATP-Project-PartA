@@ -5,7 +5,7 @@ import java.io.OutputStream;
 
 public class MyCompressorOutputStream extends OutputStream {
 
-    OutputStream out;
+    private OutputStream out;
     private int counter;
     private int next;
     private int values;
@@ -16,7 +16,7 @@ public class MyCompressorOutputStream extends OutputStream {
         counter = 0;
         values = 6;
         curValue = 0;
-        next = -1;
+        next = 0;
 
         //Todo mplement
     }
@@ -24,27 +24,26 @@ public class MyCompressorOutputStream extends OutputStream {
     @Override
     public void write(int b) throws IOException {
         //TODO implement
-        int plus_128 = b+128;
-        if (values>0) {
-            if (next == -1)
-                next = plus_128;
-            else {
-                curValue += plus_128;
-                next--;
-                if (next > 0)
-                    return;
 
-                out.write(curValue);
-                curValue = 0;
+        int plus_128 = b;
+        //int plus_128 = b;
+        if (values>=0) {
+            if (next == 0){
+                next = plus_128;
+                out.write(next);
                 values--;
-                next = -1;
+            }
+            else {
+                if (next > 0){
+                    out.write(plus_128);
+                    next--;
+                    if (values==0 && next==0)
+                        values--;
+                    return;
+                }
             }
 
         }else{
-            if (values==0) {
-                curValue = 0;
-                values = -1;
-            }
             if (curValue == plus_128)
                 counter++;
             else {
