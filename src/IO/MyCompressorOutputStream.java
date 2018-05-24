@@ -29,11 +29,11 @@ public class MyCompressorOutputStream extends OutputStream {
         for(int i = 0; i < 12; i ++)
             out.write((int)bytes[i]);
         byte[] eightBits;
-        for(int i = 12; i < bytes.length; i ++){
+        for(int i = 12; i < bytes.length; ){
             int limit = Math.min(8, bytes.length - i);
             eightBits = new byte[limit];
             byte sum = 0;
-            for(int j = 0; j < limit; j++, i++){
+            for(int j = 0; j < limit; j++,i++){
                 eightBits[j] = bytes[i];
             }
             for(int j = 0; j < limit; j ++){

@@ -50,7 +50,7 @@ public class Maze
         startPostion = new Position(Integer.valueOf(initMazeSizes[2]),Integer.valueOf(initMazeSizes[3]));
         goalPosition = new Position(Integer.valueOf(initMazeSizes[4]),Integer.valueOf(initMazeSizes[5]));
         // The index of the first char of the maze
-        int mazeFirstValue = 13;
+        int mazeFirstValue = 12;
 
         // Make the map from the stringArr
         int indexInByteMaze = mazeFirstValue;
@@ -80,10 +80,10 @@ public class Maze
     private int[] getCompressedMazeValues(String[] longString){
         int[] result = new int[6];
         for (int i = 0; i < 6; i ++){
-            byte b = Byte.valueOf(longString[i*2+1]);
+            int b = Byte.valueOf(longString[i*2+1]);
             if (b < 0)
-                b += 128;
-            result[i] = Integer.valueOf(longString[i*2])*256 + Integer.valueOf(b);
+                b += 256;
+            result[i] = Integer.valueOf(longString[i*2])*256 + b;
 
         }
         return result;
