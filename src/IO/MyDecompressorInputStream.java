@@ -36,9 +36,15 @@ public class MyDecompressorInputStream extends InputStream {
         System.out.println("MY DECOMPRESSED");
 
         int row_one = (byte)in.read();
+        bytes[0] = (byte)row_one;
         int row_two = (byte)in.read();
+        bytes[1] = (byte)row_two;
         int col_one = (byte)in.read();
+        bytes[2] = (byte)col_one;
         int col_two = (byte)in.read();
+        bytes[3] = (byte)col_two;
+        int maxValues = (row_one*256 + row_two + col_one*256 + col_two);
+        int limit = 8;
 
         for(int i = 4; i < 12; i ++)
             bytes[i] = (byte)in.read();
@@ -47,8 +53,10 @@ public class MyDecompressorInputStream extends InputStream {
         int next = in.read();
         while (next != -1){
             String nextBinary = Integer.toBinaryString(next);
-            for (int j = 8; j > 0; j--) {
+            if(maxValues < 8)
+                limit = maxValues;
 
+            for (int j = limit; j > 0; j--) {
                 if (j > nextBinary.length())
                     bytes[curIndex++] = 0;
                 else{
