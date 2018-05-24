@@ -1,6 +1,8 @@
 package IO;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 public class MyCompressorOutputStream extends OutputStream {
@@ -20,6 +22,30 @@ public class MyCompressorOutputStream extends OutputStream {
 
         //Todo mplement
     }
+    @Override
+    public void write(byte[] bytes) throws IOException{
+        System.out.println("MY COMPRESSOR - WRITE");
+
+        for(int i = 0; i < 12; i ++)
+            out.write((int)bytes[i]);
+        byte[] eightBits;
+        for(int i = 12; i < bytes.length; i ++){
+            int limit = Math.min(7, bytes.length - i);
+            eightBits = new byte[limit];
+            byte sum = 0;
+            for(int j = 0; j < limit; j++, i++){
+                eightBits[j] = bytes[i];
+            }
+            for(int j = 0; j < limit; j ++){
+                if (eightBits[j] == 1)
+                    sum += Math.pow(2, 7 - j);
+            }
+            out.write((int)sum);
+        }
+
+    }
+
+
 
     @Override
     public void write(int b) throws IOException {
@@ -55,4 +81,7 @@ public class MyCompressorOutputStream extends OutputStream {
         }
 
     }
+
 }
+
+

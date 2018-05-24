@@ -23,6 +23,12 @@ public class MyDecompressorInputStream extends InputStream {
         writeFlag = false;
     }
 
+    @Override
+    public int read(byte[] bytes){
+        System.out.println("MY DECOMPRESSED");
+        return 0;
+    }
+
 
     @Override
     public int read() throws IOException {

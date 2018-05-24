@@ -14,7 +14,7 @@ public class MyClientStrategy implements IClientStrategy {
     public void clientStrategy(InputStream inFromServer, OutputStream outToServer) {
         try {
             ObjectOutputStream toServer = new ObjectOutputStream(outToServer);
-            ObjectInputStream fromServer = new ObjectInputStream(new MyDecompressorInputStream(inFromServer));
+            MyDecompressorInputStream fromServer = new MyDecompressorInputStream(inFromServer);
             BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
 
             toServer.flush();
@@ -27,7 +27,8 @@ public class MyClientStrategy implements IClientStrategy {
             int[] mazeDimensions = new int[]{row, col};
             toServer.writeObject(mazeDimensions); //send maze dimensions to server
             toServer.flush();
-            byte[] compressedMaze = (byte[]) fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server
+            byte[] compressedMaze = new byte[fromServer.available()];
+            fromServer.read(compressedMaze); //read generated maze (compressed with MyCompressor) from server
             InputStream is = new MyDecompressorInputStream(new ByteArrayInputStream(compressedMaze));
             byte[] decompressedMaze = new byte[1000 /*CHANGE SIZE ACCORDING TO YOU MAZE SIZE*/]; //allocating byte[] for the decompressed maze -
             is.read(decompressedMaze); //Fill decompressedMaze with bytes

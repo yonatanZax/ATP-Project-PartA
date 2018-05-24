@@ -228,15 +228,13 @@ public class Maze
     // Makes numbers to a compressed String, Example:
     // 300 = "255,45"
     private String getCompressedCoordinates(int n){
-        String result = "";
-        while(n>255){
-            result += "255,";
-            n -= 255;
-        }
-        result += String.valueOf(n);
-        String[] arr = result.split(",");
-        return arr.length +"," + result;
+        String ans = "";
+        int divided = n / 256;
+        int leftOver = n % 256;
+        ans = divided + "," + leftOver;
+        return ans;
     }
+
 
     //Makes a long String from a char[][] maze
     private String generateMazeString() {
