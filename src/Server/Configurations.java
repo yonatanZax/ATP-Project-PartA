@@ -1,6 +1,7 @@
 package Server;
 
 import algorithms.search.BestFirstSearch;
+import algorithms.search.BreadthFirstSearch;
 import algorithms.search.DepthFirstSearch;
 
 import java.io.FileInputStream;
@@ -9,6 +10,12 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Configurations {
+
+    private static String algorithms_searchAlgorithm;
+    private static String generators_mazeGenerator;
+    private static String server_threadPoolSize;
+
+
     public static void main( String[] args ){
 
         Properties prop = new Properties();
@@ -26,11 +33,13 @@ public class Configurations {
             //load a properties file from class path, inside static method
             prop.load(input);
             String search = prop.getProperty("serachAlgorithm");
-            if (search == "BestFirstSearch"){
-                ServerStrategySolveSearchProblem.searchAlgorithm = new BestFirstSearch();
+            if (search == "BFS"){
+                ServerStrategySolveSearchProblem.searchAlgorithm = new BreadthFirstSearch();
             }
             else if (search == "DFS")
                 ServerStrategySolveSearchProblem.searchAlgorithm = new DepthFirstSearch();
+            else
+                ServerStrategySolveSearchProblem.searchAlgorithm = new BestFirstSearch();
             //get the property value and print it out
             System.out.println(prop.getProperty("database"));
             System.out.println(prop.getProperty("dbuser"));

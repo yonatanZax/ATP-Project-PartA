@@ -28,7 +28,7 @@ public class Server {
         this.port = port;
         this.listeningInterval = listeningInterval;
         this.serverStrategy = serverStrategy;
-        threadPool = Executors.newCachedThreadPool();
+        threadPool = Executors.newFixedThreadPool(2);
     }
 
     public void start() {
@@ -49,8 +49,8 @@ public class Server {
                     Socket clientSocket = server.accept(); // blocking call
                     //LOG.info(String.format("Client excepted: %s", clientSocket.toString()));
                     System.out.println(String.format("Server: Client accepted: %s", clientSocket.toString()));
-                    //threadPool.execute(()->{ handleClient(clientSocket);});
-                    handleClient(clientSocket);
+                    threadPool.execute(()->{ handleClient(clientSocket);});
+                    //handleClient(clientSocket);
 
                 } catch (SocketTimeoutException e) {
                     //LOG.debug("SocketTimeout - No clients pending!");
