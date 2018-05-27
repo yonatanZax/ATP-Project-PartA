@@ -17,7 +17,7 @@ public class Configurations {
 
     private static ISearchingAlgorithm algorithms_solveAlgorithm;
     private static IMazeGenerator generators_mazeGenerator;
-    private static int server_threadPoolSize;
+    private static int server_threadPoolSize = 3;
 
 
     public static void run(){
@@ -44,6 +44,8 @@ public class Configurations {
                     algorithms_solveAlgorithm = new BestFirstSearch();
                 case "DFS":
                     algorithms_solveAlgorithm = new DepthFirstSearch();
+                default:
+                    algorithms_solveAlgorithm = new BreadthFirstSearch();
             }
 
             switch (properties.getProperty("algorithms_mazeGenerateAlgorithm")){
@@ -51,10 +53,14 @@ public class Configurations {
                     generators_mazeGenerator = new SimpleMazeGenerator();
                 case "myMazeGenerator":
                     generators_mazeGenerator = new MyMazeGenerator();
+                default:
+                    generators_mazeGenerator = new MyMazeGenerator();
 
             }
 
-            server_threadPoolSize = Integer.valueOf(properties.getProperty("server_threadPoolSize"));
+            if (isNumeric(properties.getProperty("server_threadPoolSize")))
+                server_threadPoolSize = Integer.parseInt(properties.getProperty("server_threadPoolSize"));
+
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -67,6 +73,19 @@ public class Configurations {
                 }
             }
         }
+    }
+
+    public static boolean isNumeric(String str)
+    {
+        try
+        {
+            double d = Double.parseDouble(str);
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
+        return true;
     }
 
     public static ISearchingAlgorithm getAlgorithms_solveAlgorithm() {

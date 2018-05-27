@@ -43,18 +43,15 @@ public class MyDecompressorInputStream extends InputStream {
         int charAtInt = 8;
         while (next != -1){
             String nextBinary = Integer.toBinaryString(next);
+            while(nextBinary.length() < 8)
+                nextBinary = "0" + nextBinary;
             if(maxValues < 8)
                 limit = maxValues;
 
             for (int j = limit; j > 0; j--) {
-                if (j > nextBinary.length())
-                    bytes[curIndex++] = 0;
-                else{
-                    charAtInt = Math.min(limit,nextBinary.length());
-                    byte b = (byte) ((nextBinary.charAt(charAtInt - j) == '1') ? 1 : 0);
-                    bytes[curIndex++] = b;
-                }
-
+               charAtInt = Math.min(limit,nextBinary.length());
+               byte b = (byte) ((nextBinary.charAt(charAtInt - j) == '1') ? 1 : 0);
+               bytes[curIndex++] = b;
 
             }
             maxValues -= 8;

@@ -11,9 +11,6 @@ import java.io.*;
 
 public class ServerStrategyGenerateMaze implements IServerStrategy{
 
-static {
-    Configurations.run();
-}
     @Override
     public void serverStrategy(InputStream inFromClient, OutputStream outToClient) {
 
