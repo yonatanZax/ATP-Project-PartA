@@ -7,17 +7,14 @@ import java.net.Socket;
 
 public class Client {
     private InetAddress serverIP;
-    private String hostAddress;
     private int serverPort;
     private IClientStrategy clientStrategy;
 
     public Client(InetAddress serverIP, int serverPort, IClientStrategy clientStrategy) {
         this.serverIP = serverIP;
-        hostAddress = serverIP.getHostAddress();
         this.serverPort = serverPort;
         this.clientStrategy = clientStrategy;
     }
-
 
     public void communicateWithServer() {
         try {

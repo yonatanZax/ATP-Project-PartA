@@ -7,28 +7,8 @@ public class MyDecompressorInputStream extends InputStream {
 
     private InputStream in;
 
-    // Values - We are expecting 6 values for mapSize,startPosition,goalPosition
-    private int values;
-    /* Next
-    * Before every coordinate we have a number that tells us how many numbers we need
-    * Example: "2,255,45" = 255+45 = 300
-    * */
-    //private int next;
-    /* At first it saves
-    * */
-    private int curValue;
-    private boolean valuesFlag;
-    private boolean writeFlag;
-    private int counter;
-
     public MyDecompressorInputStream(InputStream in) {
         this.in = in;
-        values = 6;
-        //next = 0;
-        curValue = 0;
-        counter=0;
-        valuesFlag = false;
-        writeFlag = false;
     }
 
     @Override

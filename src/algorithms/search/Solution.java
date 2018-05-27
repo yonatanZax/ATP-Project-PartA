@@ -1,11 +1,13 @@
 package algorithms.search;
 
+import javax.sql.rowset.serial.SerialArray;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Represents a path that solves the searchable problem.
  */
-public class Solution
+public class Solution implements Serializable
 {
 	/* a list of the 'AStates' we need to take to complete the problem in the right order from start to goal.*/
 	private ArrayList<AState> aStateList;

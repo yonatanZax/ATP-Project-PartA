@@ -5,6 +5,7 @@ import IO.MyDecompressorInputStream;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.search.BestFirstSearch;
+import algorithms.search.ISearchingAlgorithm;
 import algorithms.search.SearchableMaze;
 import algorithms.search.Solution;
 
@@ -12,31 +13,33 @@ import java.io.*;
 
 public class ServerStrategySolveSearchProblem implements IServerStrategy {
 
+    static { Configurations.run(); }
+
     @Override
     public void serverStrategy(InputStream inFromClient, OutputStream outToClient) {
         //TODO implement
         String tempDirectoryPath = System.getProperty("java.io.tmpdir");
         try {
-            MyDecompressorInputStream fromClient = new MyDecompressorInputStream(inFromClient);
-            BufferedWriter toClient = new BufferedWriter(new OutputStreamWriter(outToClient));
+
+            ObjectInputStream fromClient = new ObjectInputStream(inFromClient);
+            ObjectOutputStream toClient = new ObjectOutputStream(outToClient);
             toClient.flush();
             try {
-                byte[] mazeByteArray = new byte[0];
-                fromClient.read(mazeByteArray);
-                Maze maze = new Maze(mazeByteArray);
+                Maze maze = (Maze) fromClient.readObject();
                 SearchableMaze searchableMaze = new SearchableMaze(maze);
-                BestFirstSearch bfs = new BestFirstSearch();
-                Solution solution = bfs.solve(searchableMaze);
-                toClient.write(solution.toString());
+                //BestFirstSearch bfs = new BestFirstSearch();
+                Solution solution = Configurations.getAlgorithms_solveAlgorithm().solve(searchableMaze);
+                toClient.writeObject(solution);
                 toClient.flush();
             }
-            catch (ArrayIndexOutOfBoundsException e){
-                System.out.println("Client should send 2 parameters of maze size: ServerStrategyGenerateMaze");
-            }
             catch (IOException e){
-                System.out.println("IOException in ServerStrategyGenerateMaze");
+                System.out.println("IOException in ServerStrategySolveSearchProblem");
                 System.out.println(e.getMessage());
                 e.printStackTrace();
+            }
+            catch (Exception e){
+                System.out.println("Exception in ServerStrategySolveSearchProblem");
+                System.out.println(e.getMessage());
             }
 
         } catch (IOException e) {
