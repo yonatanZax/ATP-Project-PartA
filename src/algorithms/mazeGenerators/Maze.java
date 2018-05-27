@@ -1,13 +1,15 @@
 package algorithms.mazeGenerators;
 
 
+import java.io.Serializable;
+
 /**    The maze is represented as a 2D char array.
  *     Zero ('0') = Pass
  *     One ('1') = Wall
  *     Start ('S') = The starting position
  *     End ('E') = The "Goal" position
  */
-public class Maze
+public class Maze implements Serializable
 {
 
     private char[][] map; //the actual maze

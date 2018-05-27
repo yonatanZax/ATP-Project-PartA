@@ -1,13 +1,13 @@
 package algorithms.mazeGenerators;
 
 
-
+import java.io.Serializable;
 
 /**
  * Represent a location in a 2D dimension of ints
  *
  */
-public class Position
+public class Position implements Serializable
 {
 	private Integer row;
 	private Integer col;

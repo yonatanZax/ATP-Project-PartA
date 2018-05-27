@@ -1,9 +1,11 @@
 package algorithms.search;
 
+import java.io.Serializable;
+
 /**
  * An abstract class representing a state in a searchable problem.
  */
-public abstract class AState
+public abstract class AState implements Serializable
 {
 	// Weight is used to allow Priority Queue
 	private int weight;

@@ -83,8 +83,12 @@ public class Server {
     }
 
     public static void main(String[] args) {
+
         Server mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
         mazeGeneratingServer.start();
+
+        //Server solveSolvableProblem = new Server(5401, 1000, new ServerStrategySolveSearchProblem());
+        //solveSolvableProblem.start();
     }
 }
 

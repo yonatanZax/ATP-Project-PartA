@@ -19,14 +19,12 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
         //TODO implement
         String tempDirectoryPath = System.getProperty("java.io.tmpdir");
         try {
-            MyDecompressorInputStream fromClient = new MyDecompressorInputStream(new ObjectInputStream(inFromClient));
-            OutputStream ObjectoutToClient = new ObjectOutputStream(outToClient);
-            ObjectOutputStream toClient = new ObjectOutputStream(ObjectoutToClient);
+
+            ObjectInputStream fromClient = new ObjectInputStream(inFromClient);
+            ObjectOutputStream toClient = new ObjectOutputStream(outToClient);
             toClient.flush();
             try {
-                byte[] mazeByteArray = new byte[2512];
-                fromClient.read(mazeByteArray);
-                Maze maze = new Maze(mazeByteArray);
+                Maze maze = (Maze) fromClient.readObject();
                 SearchableMaze searchableMaze = new SearchableMaze(maze);
                 BestFirstSearch bfs = new BestFirstSearch();
                 Solution solution = bfs.solve(searchableMaze);
@@ -34,9 +32,13 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
                 toClient.flush();
             }
             catch (IOException e){
-                System.out.println("IOException in ServerStrategyGenerateMaze");
+                System.out.println("IOException in ServerStrategySolveSearchProblem");
                 System.out.println(e.getMessage());
                 e.printStackTrace();
+            }
+            catch (Exception e){
+                System.out.println("Exception in ServerStrategySolveSearchProblem");
+                System.out.println(e.getMessage());
             }
 
         } catch (IOException e) {
