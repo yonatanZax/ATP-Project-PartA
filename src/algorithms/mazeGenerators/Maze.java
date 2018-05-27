@@ -38,14 +38,6 @@ public class Maze implements Serializable
 
     /**
      * default content start with 0
-     * seperated with "-" in the big string
-     * seperated with "," in the index's
-     * Size = (numOfBytes),mazeRow,(numOfBytes),mazeCol
-     * start = (numOfBytes),startRow,(numOfBytes),startCol
-     * Goal = (numOfBytes),goalRow,(numOfBytes),goalCol
-     * Beginning of String example = "3,255,255,90,   3,255,255,90,  1,15,1,0,  3,255,245,1,240
-     * Maze = byteMaze[3] - #,#,#,#,
-     * @return
      */
     public Maze(byte[] byteMaze){
         String[] stringArr = new String[byteMaze.length];
@@ -59,8 +51,6 @@ public class Maze implements Serializable
         map = new char[Integer.valueOf(initMazeSizes[0])][Integer.valueOf(initMazeSizes[1])];
         startPostion = new Position(Integer.valueOf(initMazeSizes[2]),Integer.valueOf(initMazeSizes[3]));
         goalPosition = new Position(Integer.valueOf(initMazeSizes[4]),Integer.valueOf(initMazeSizes[5]));
-        // The index of the first char of the maze
-
 
         // Make the map from the stringArr
         int indexInByteMaze = 12;
@@ -78,12 +68,11 @@ public class Maze implements Serializable
 
     /**
      * Makes an array of Coordinates from the longString
-     "2,255,45,2,255,45,1,150,1,0,2,255,30,1,50,0,1,1,0,1,0..."
+     "1,45,1,45,0,150,0,0,1,30,0,50,0,1,1,0,1,0..."
      result = {300,300,150,0,285,50,15}
      Size = result[0]*result[1] = 300*300
      Start = (result[2],result[3]) = (150,0)
      Goal = (result[4],result[5]) = (285,50)
-     Maze starting index = result[6] = 15
      * @param longString - all the data (not compressed)
      * @return int array with the values for map,Start,End
      */
@@ -123,11 +112,17 @@ public class Maze implements Serializable
      *     			110110
      */
     public void print() {
+        System.out.println(toString());
+    }
+
+    public String toString() {
+        String ans = "";
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++)
-                System.out.print(map[i][j]);
-            System.out.println();
+                ans += map[i][j];
+            ans += "\n";
         }
+        return ans;
     }
 
 
@@ -184,19 +179,17 @@ public class Maze implements Serializable
     }
 
 
-    //ToDo - toByteArray method
     /**
      * default content start with 0
      * Size = (numOfBytes),mazeRow,(numOfBytes),mazeCol
      * start = (numOfBytes),startRow,(numOfBytes),startCol
      * Goal = (numOfBytes),goalRow,(numOfBytes),goalCol
-     * Beginning of String example = "3,255,255,90,   3,255,255,90,  1,15,1,0,  3,255,245,1,240"
+     * Beginning of String example =    2,90             2,90,      0,15 0,0    1,245  0,240
      *                              MazeRows = 600    MazeCols=600   S(15,0)    End(500,240)
      * Maze = "1,0,0,1,0,1,0,1,0,1,0....."
      * @return byte[] byteArray - not compressed
      */
     public byte[] toByteArray(){
-        String s = getCompressedCoordinates(600);
         String byteString = "";
         byteString = getCompressedCoordinates(map.length) + "," + getCompressedCoordinates(map[0].length) + ",";
         byteString += getCompressedCoordinates(startPostion.getRowIndex()) + "," + getCompressedCoordinates(startPostion.getColumnIndex()) + ",";
@@ -224,7 +217,7 @@ public class Maze implements Serializable
     }
 
     // Makes numbers to a compressed String, Example:
-    // 300 = "255,45"
+    // 300 = "1,44"
     private String getCompressedCoordinates(int n){
         String ans = "";
         int divided = n / 256;
@@ -259,27 +252,6 @@ public class Maze implements Serializable
         return true;
     }
 
-    public static void main(String[] args) {        char[][] map = {{'S','1','0','1','1'},
-                        {'0','1','1','0','1'},
-                        {'0','1','1','0','1'},
-                        {'0','0','0','0','1'},
-                        {'0','0','1','E','1'},
-                        {'0','0','0','1','1'}};
 
-
-        Maze maze;
-        Maze maze2;
-        MyMazeGenerator mg = new MyMazeGenerator();
-        try {
-            maze = mg.generate(1000,1000 );
-            //maze.print();
-            maze2 = new Maze(maze.toByteArray());
-            System.out.println(maze.equals(maze2));
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-
-
-    }
 }
 

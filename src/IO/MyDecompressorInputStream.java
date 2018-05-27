@@ -7,28 +7,8 @@ public class MyDecompressorInputStream extends InputStream {
 
     private InputStream in;
 
-    // Values - We are expecting 6 values for mapSize,startPosition,goalPosition
-    private int values;
-    /* Next
-    * Before every coordinate we have a number that tells us how many numbers we need
-    * Example: "2,255,45" = 255+45 = 300
-    * */
-    //private int next;
-    /* At first it saves
-    * */
-    private int curValue;
-    private boolean valuesFlag;
-    private boolean writeFlag;
-    private int counter;
-
     public MyDecompressorInputStream(InputStream in) {
         this.in = in;
-        values = 6;
-        //next = 0;
-        curValue = 0;
-        counter=0;
-        valuesFlag = false;
-        writeFlag = false;
     }
 
     @Override
@@ -53,6 +33,7 @@ public class MyDecompressorInputStream extends InputStream {
             col_two += 256;
 
         int maxValues = (row_one*256 + row_two) * (col_one*256 + col_two);
+        int finMaxValues = maxValues + 12;
         int limit = 8;
 
         for(int i = 4; i < 12; i ++)
@@ -61,20 +42,17 @@ public class MyDecompressorInputStream extends InputStream {
         int curIndex = 12;
         int next = in.read();
         int charAtInt = 8;
-        while (next != -1){
+        while (curIndex < finMaxValues){
             String nextBinary = Integer.toBinaryString(next);
+            while(nextBinary.length() < 8)
+                nextBinary = "0" + nextBinary;
             if(maxValues < 8)
                 limit = maxValues;
 
             for (int j = limit; j > 0; j--) {
-                if (j > nextBinary.length())
-                    bytes[curIndex++] = 0;
-                else{
                     charAtInt = Math.min(limit,nextBinary.length());
                     byte b = (byte) ((nextBinary.charAt(charAtInt - j) == '1') ? 1 : 0);
                     bytes[curIndex++] = b;
-                }
-
 
             }
             maxValues -= 8;

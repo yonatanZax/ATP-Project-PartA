@@ -2,6 +2,7 @@ package Server;
 
 import IO.MyCompressorOutputStream;
 import IO.MyDecompressorInputStream;
+import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.search.ISearchingAlgorithm;
@@ -20,12 +21,12 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
             ObjectOutputStream toClientObject = new ObjectOutputStream(outToClient);
             ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
             MyCompressorOutputStream toClient = new MyCompressorOutputStream(byteOut);
-            //MyCompressorOutputStream toClient = new MyCompressorOutputStream(new ObjectOutputStream(outToClient));
 
             int[] mazeDimensions;
             try {
                 mazeDimensions = (int[]) fromClient.readObject();
-                MyMazeGenerator mg = new MyMazeGenerator();
+                //MyMazeGenerator mg = new MyMazeGenerator();
+                IMazeGenerator mg = Configurations.getGenerators_mazeGenerator();
                 Maze maze = mg.generate(mazeDimensions[0], mazeDimensions[1]);
                 byte[] mazeByteArray = maze.toByteArray();
                 //toclientObject.writeObject(mazeByteArray);
@@ -44,6 +45,8 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
                 System.out.println(e.getMessage());
                 e.printStackTrace();
             }
+            fromClient.close();
+            toClientObject.close();
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -22,13 +22,14 @@ public class Server {
     private Executor threadPool;
     //private static final Logger LOG = LogManager.getLogger(); //Log4j2
 
-
+static { Configurations.run(); }
 
     public Server(int port, int listeningInterval, IServerStrategy serverStrategy) {
         this.port = port;
         this.listeningInterval = listeningInterval;
         this.serverStrategy = serverStrategy;
-        threadPool = Executors.newFixedThreadPool(2);
+        int tPoolSize = Configurations.getServer_threadPoolSize();
+        threadPool = Executors.newFixedThreadPool(tPoolSize);
     }
 
     public void start() {

@@ -1,8 +1,12 @@
 package Server;
 
+import algorithms.mazeGenerators.IMazeGenerator;
+import algorithms.mazeGenerators.MyMazeGenerator;
+import algorithms.mazeGenerators.SimpleMazeGenerator;
 import algorithms.search.BestFirstSearch;
 import algorithms.search.BreadthFirstSearch;
 import algorithms.search.DepthFirstSearch;
+import algorithms.search.ISearchingAlgorithm;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,14 +15,13 @@ import java.util.Properties;
 
 public class Configurations {
 
-    private static String algorithms_searchAlgorithm;
-    private static String generators_mazeGenerator;
-    private static String server_threadPoolSize;
+    private static ISearchingAlgorithm algorithms_solveAlgorithm;
+    private static IMazeGenerator generators_mazeGenerator;
+    private static int server_threadPoolSize = 3;
 
 
-    public static void main( String[] args ){
-
-        Properties prop = new Properties();
+    public static void run(){
+        Properties properties = new Properties();
         InputStream input = null;
 
         try {
@@ -31,19 +34,33 @@ public class Configurations {
             }
 
             //load a properties file from class path, inside static method
-            prop.load(input);
-            String search = prop.getProperty("serachAlgorithm");
-            if (search == "BFS"){
-                ServerStrategySolveSearchProblem.searchAlgorithm = new BreadthFirstSearch();
+            properties.load(input);
+
+
+            switch (properties.getProperty("algorithms_solveAlgorithm")){
+                case "BFS":
+                    algorithms_solveAlgorithm = new BreadthFirstSearch();
+                case "BestFirstSearch":
+                    algorithms_solveAlgorithm = new BestFirstSearch();
+                case "DFS":
+                    algorithms_solveAlgorithm = new DepthFirstSearch();
+                default:
+                    algorithms_solveAlgorithm = new BreadthFirstSearch();
             }
-            else if (search == "DFS")
-                ServerStrategySolveSearchProblem.searchAlgorithm = new DepthFirstSearch();
-            else
-                ServerStrategySolveSearchProblem.searchAlgorithm = new BestFirstSearch();
-            //get the property value and print it out
-            System.out.println(prop.getProperty("database"));
-            System.out.println(prop.getProperty("dbuser"));
-            System.out.println(prop.getProperty("dbpassword"));
+
+            switch (properties.getProperty("algorithms_mazeGenerateAlgorithm")){
+                case "simpleMazeGenerator":
+                    generators_mazeGenerator = new SimpleMazeGenerator();
+                case "myMazeGenerator":
+                    generators_mazeGenerator = new MyMazeGenerator();
+                default:
+                    generators_mazeGenerator = new MyMazeGenerator();
+
+            }
+
+            if (isNumeric(properties.getProperty("server_threadPoolSize")))
+                server_threadPoolSize = Integer.parseInt(properties.getProperty("server_threadPoolSize"));
+
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -56,7 +73,30 @@ public class Configurations {
                 }
             }
         }
-
     }
 
+    public static boolean isNumeric(String str)
+    {
+        try
+        {
+            double d = Double.parseDouble(str);
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public static ISearchingAlgorithm getAlgorithms_solveAlgorithm() {
+        return algorithms_solveAlgorithm;
+    }
+
+    public static IMazeGenerator getGenerators_mazeGenerator() {
+        return generators_mazeGenerator;
+    }
+
+    public static int getServer_threadPoolSize() {
+        return server_threadPoolSize;
+    }
 }
