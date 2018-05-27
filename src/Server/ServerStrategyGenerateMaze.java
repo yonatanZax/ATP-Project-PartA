@@ -4,6 +4,7 @@ import IO.MyCompressorOutputStream;
 import IO.MyDecompressorInputStream;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
+import algorithms.search.ISearchingAlgorithm;
 
 import java.io.*;
 
@@ -12,19 +13,23 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
 
     @Override
     public void serverStrategy(InputStream inFromClient, OutputStream outToClient) {
-        //TODO implement
+
         System.out.println("ServerStrategy: GenerateMaze");
         try {
             ObjectInputStream fromClient = new ObjectInputStream(inFromClient);
-            MyCompressorOutputStream toClient = new MyCompressorOutputStream(new ObjectOutputStream(outToClient));
-            toClient.flush();
-            int[] mazeDimensions = new int[2];
+            OutputStream toclientObject = new ObjectOutputStream(outToClient);
+            MyCompressorOutputStream toClient = new MyCompressorOutputStream(toclientObject);
+            //MyCompressorOutputStream toClient = new MyCompressorOutputStream(new ObjectOutputStream(outToClient));
+
+            int[] mazeDimensions;
             try {
                 mazeDimensions = (int[]) fromClient.readObject();
                 MyMazeGenerator mg = new MyMazeGenerator();
                 Maze maze = mg.generate(mazeDimensions[0], mazeDimensions[1]);
                 byte[] mazeByteArray = maze.toByteArray();
+                //toclientObject.writeObject(mazeByteArray);
                 toClient.write(mazeByteArray);
+                toClient.flush();
             }
             catch (ClassNotFoundException e){
                 System.out.println("Class Not found exception: ServerStrategyGenerateMaze");
