@@ -13,7 +13,6 @@ public class MyDecompressorInputStream extends InputStream {
 
     @Override
     public int read(byte[] bytes) throws IOException{
-        System.out.println("MY DECOMPRESSED");
 
         int row_one = (byte)in.read();
         bytes[0] = (byte)row_one;
@@ -33,6 +32,7 @@ public class MyDecompressorInputStream extends InputStream {
             col_two += 256;
 
         int maxValues = (row_one*256 + row_two) * (col_one*256 + col_two);
+        int finMaxValues = maxValues + 12;
         int limit = 8;
 
         for(int i = 4; i < 12; i ++)
@@ -41,7 +41,7 @@ public class MyDecompressorInputStream extends InputStream {
         int curIndex = 12;
         int next = in.read();
         int charAtInt = 8;
-        while (next != -1){
+        while (curIndex < finMaxValues){
             String nextBinary = Integer.toBinaryString(next);
             while(nextBinary.length() < 8)
                 nextBinary = "0" + nextBinary;
@@ -57,15 +57,9 @@ public class MyDecompressorInputStream extends InputStream {
             maxValues -= 8;
             next = in.read();
         }
-
-
-
         return 0;
     }
-
 
     @Override
-    public int read() throws IOException {
-        return 0;
-    }
+    public int read() throws IOException { return 0; }
 }

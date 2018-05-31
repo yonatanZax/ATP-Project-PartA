@@ -7,19 +7,15 @@ public class MyCompressorOutputStream extends OutputStream {
     private OutputStream out;
 
     public MyCompressorOutputStream(OutputStream outPutStream) {
-
         this.out = outPutStream;
-
     }
 
     @Override
     public void write(byte[] bytes) throws IOException {
-        System.out.println("MY COMPRESSOR - WRITE");
         byte[] tempSendBytes = new byte[bytes.length];
         int sendBytesIndex = 0;
         for (int i = 0; i < 12; i++)
             tempSendBytes[i] = bytes[i];
-        //out.write((int) bytes[i]);
         sendBytesIndex = 12;
         byte[] eightBits;
         for (int i = 12; i < bytes.length; ) {
@@ -34,7 +30,6 @@ public class MyCompressorOutputStream extends OutputStream {
                     sum += Math.pow(2, 7 - j);
             }
             tempSendBytes[sendBytesIndex++] = sum;
-            //out.write((int)sum);
         }
         byte[] sendBytes = new byte[sendBytesIndex];
         for (int i = 0; i < sendBytesIndex; i++)
@@ -43,15 +38,12 @@ public class MyCompressorOutputStream extends OutputStream {
 
         out.write(sendBytes);
 
-
-
-
     }
 
 
     @Override
     public void write(int b) throws IOException {
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        //System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
     }
 }
 

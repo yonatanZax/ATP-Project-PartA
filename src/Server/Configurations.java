@@ -19,7 +19,6 @@ public class Configurations {
     private static IMazeGenerator generators_mazeGenerator;
     private static int server_threadPoolSize = 3;
 
-
     public static void run(){
         Properties properties = new Properties();
         InputStream input = null;
@@ -35,7 +34,6 @@ public class Configurations {
 
             //load a properties file from class path, inside static method
             properties.load(input);
-
 
             switch (properties.getProperty("algorithms_solveAlgorithm")){
                 case "BFS":
@@ -58,8 +56,11 @@ public class Configurations {
 
             }
 
-            if (isNumeric(properties.getProperty("server_threadPoolSize")))
-                server_threadPoolSize = Integer.parseInt(properties.getProperty("server_threadPoolSize"));
+            if (isNumeric(properties.getProperty("server_threadPoolSize"))) {
+                int temp = Integer.parseInt(properties.getProperty("server_threadPoolSize"));
+                if (temp > 0)
+                    server_threadPoolSize = temp;
+            }
 
 
         } catch (IOException ex) {
