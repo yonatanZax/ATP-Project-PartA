@@ -18,9 +18,7 @@ public class Server {
     private ExecutorService threadPool;
     //private static final Logger LOG = LogManager.getLogger(); //Log4j2
 
-static {
-    Configurations.run();
-}
+static { Configurations.run(); }
 
     public Server(int port, int listeningInterval, IServerStrategy serverStrategy) {
         this.port = port;
@@ -49,7 +47,6 @@ static {
                     //LOG.info(String.format("Client excepted: %s", clientSocket.toString()));
                     //System.out.println(String.format("Server: Client accepted: %s", clientSocket.toString()));
                     threadPool.execute(()->{ handleClient(clientSocket);});
-                    //handleClient(clientSocket);
 
                 } catch (SocketTimeoutException e) {
                     //LOG.debug("SocketTimeout - No clients pending!");
@@ -64,10 +61,6 @@ static {
 
     private void handleClient(Socket clientSocket) {
         try {
-            //LOG.debug("Client excepted!");
-            //LOG.debug(String.format("Handling client with socket: %s", clientSocket.toString()));
-            //System.out.println("Server - handleClient: Client accepted!");
-            //System.out.println(String.format("Server - handleClient: Handling client with socket: %s", clientSocket.toString()));
             serverStrategy.serverStrategy(clientSocket.getInputStream(), clientSocket.getOutputStream());
             clientSocket.getInputStream().close();
             clientSocket.getOutputStream().close();
@@ -78,7 +71,6 @@ static {
     }
 
     public void stop() {
-        //LOG.info("Stopping server..");
         stop = true;
     }
 

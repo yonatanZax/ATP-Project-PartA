@@ -25,11 +25,9 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
             int[] mazeDimensions;
             try {
                 mazeDimensions = (int[]) fromClient.readObject();
-                //MyMazeGenerator mg = new MyMazeGenerator();
                 IMazeGenerator mg = Configurations.getGenerators_mazeGenerator();
                 Maze maze = mg.generate(mazeDimensions[0], mazeDimensions[1]);
                 byte[] mazeByteArray = maze.toByteArray();
-                //toclientObject.writeObject(mazeByteArray);
                 toClient.write(mazeByteArray);
                 toClientObject.writeObject(byteOut.toByteArray());
                 toClientObject.flush();
@@ -40,13 +38,15 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
             catch (ArrayIndexOutOfBoundsException e){
                 System.out.println("Client should send 2 parameters of maze size: ServerStrategyGenerateMaze");
             }
-            catch (IOException e){
-                System.out.println("IOException in ServerStrategyGenerateMaze");
+            catch (Exception e){
+                System.out.println("Exception in ServerStrategyGenerateMaze");
                 System.out.println(e.getMessage());
                 e.printStackTrace();
             }
             fromClient.close();
             toClientObject.close();
+            byteOut.close();
+            toClient.close();
 
         } catch (IOException e) {
             e.printStackTrace();
