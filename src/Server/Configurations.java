@@ -25,6 +25,8 @@ public class Configurations {
 
             String filename = "./Resources/config.properties";
             input = new FileInputStream(filename);
+
+
             //load a properties file from class path, inside static method
             properties.load(input);
 
@@ -64,7 +66,8 @@ public class Configurations {
                 return new DepthFirstSearch();
 
         }
-        return new BreadthFirstSearch();    }
+        return new BreadthFirstSearch();
+    }
 
     public static IMazeGenerator getGenerators_mazeGenerator() {
         switch (properties.getProperty("algorithms_mazeGenerateAlgorithm")){
@@ -77,11 +80,15 @@ public class Configurations {
     }
 
     public static int getServer_threadPoolSize() {
-        if (isNumeric(properties.getProperty("server_threadPoolSize"))) {
-            int temp = Integer.parseInt(properties.getProperty("server_threadPoolSize"));
-            if (temp > 0)
-                return temp;
+        try{
+            if (isNumeric(properties.getProperty("server_threadPoolSize"))) {
+                int temp = Integer.parseInt(properties.getProperty("server_threadPoolSize"));
+                if (temp > 0)
+                    return temp;
+            }
+        }catch (Exception e){
         }
+
         return 3;
     }
 }
