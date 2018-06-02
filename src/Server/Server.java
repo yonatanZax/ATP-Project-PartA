@@ -15,7 +15,7 @@ public class Server {
     private int listeningInterval;
     private IServerStrategy serverStrategy;
     private volatile boolean stop;
-    private Executor threadPool;
+    private ExecutorService threadPool;
     //private static final Logger LOG = LogManager.getLogger(); //Log4j2
 
 static {
@@ -55,6 +55,7 @@ static {
                     //LOG.debug("SocketTimeout - No clients pending!");
                 }
             }
+            threadPool.shutdown();
             server.close();
         } catch (IOException e) {
             //LOG.error("IOException", e);

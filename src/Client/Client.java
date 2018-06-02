@@ -16,6 +16,7 @@ public class Client {
         this.clientStrategy = clientStrategy;
     }
 
+
     public void communicateWithServer() {
         try {
             Socket theServer = new Socket(serverIP, serverPort);

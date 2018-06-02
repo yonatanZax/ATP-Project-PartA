@@ -19,6 +19,7 @@ public class Configurations {
     private static IMazeGenerator generators_mazeGenerator;
     private static int server_threadPoolSize = 3;
 
+
     public static void run(){
         Properties properties = new Properties();
         InputStream input = null;
@@ -34,6 +35,7 @@ public class Configurations {
 
             //load a properties file from class path, inside static method
             properties.load(input);
+
 
             switch (properties.getProperty("algorithms_solveAlgorithm")){
                 case "BFS":

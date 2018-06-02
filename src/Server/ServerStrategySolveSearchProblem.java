@@ -14,20 +14,37 @@ import java.io.*;
 public class ServerStrategySolveSearchProblem implements IServerStrategy {
 
 
+    private static String tempDirectoryPath = System.getProperty("java.io.tmpdir");
     @Override
     public void serverStrategy(InputStream inFromClient, OutputStream outToClient) {
-        //TODO implement
-        String tempDirectoryPath = System.getProperty("java.io.tmpdir");
-        try {
 
+        Solution solution;
+        try {
             ObjectInputStream fromClient = new ObjectInputStream(inFromClient);
             ObjectOutputStream toClient = new ObjectOutputStream(outToClient);
             toClient.flush();
             try {
                 Maze maze = (Maze) fromClient.readObject();
-                SearchableMaze searchableMaze = new SearchableMaze(maze);
-                //BestFirstSearch bfs = new BestFirstSearch();
-                Solution solution = Configurations.getAlgorithms_solveAlgorithm().solve(searchableMaze);
+                String tempPath = tempDirectoryPath + "/maze" + maze.toString().hashCode();
+                File f = new File(tempPath);
+                if(f.exists()){ // the file exists, we don't need to solve again. only take what exists.
+                    FileInputStream fin = new FileInputStream(tempPath);
+                    ObjectInputStream oin = new ObjectInputStream(fin);
+                    solution = (Solution) oin.readObject();
+                    fin.close();
+                    oin.close();
+                }
+                else{
+                    SearchableMaze searchableMaze = new SearchableMaze(maze);
+                    solution = Configurations.getAlgorithms_solveAlgorithm().solve(searchableMaze);
+                    f.createNewFile();
+                    FileOutputStream fout = new FileOutputStream(tempPath);
+                    ObjectOutputStream oout = new ObjectOutputStream(fout);
+                    oout.writeObject(solution);
+                    oout.flush();
+                    fout.close();
+                    oout.close();
+                }
                 toClient.writeObject(solution);
                 toClient.flush();
             }
@@ -40,10 +57,14 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
                 System.out.println("Exception in ServerStrategySolveSearchProblem");
                 System.out.println(e.getMessage());
             }
+            toClient.close();
+            fromClient.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 
 }

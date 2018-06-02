@@ -7,7 +7,9 @@ public class MyCompressorOutputStream extends OutputStream {
     private OutputStream out;
 
     public MyCompressorOutputStream(OutputStream outPutStream) {
+
         this.out = outPutStream;
+
     }
 
     @Override
@@ -37,6 +39,9 @@ public class MyCompressorOutputStream extends OutputStream {
 
 
         out.write(sendBytes);
+
+
+
 
     }
 

@@ -57,8 +57,12 @@ public class MyDecompressorInputStream extends InputStream {
             maxValues -= 8;
             next = in.read();
         }
+
+
+
         return 0;
     }
+
 
     @Override
     public int read() throws IOException { return 0; }

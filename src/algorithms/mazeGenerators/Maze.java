@@ -51,8 +51,6 @@ public class Maze implements Serializable
         map = new char[Integer.valueOf(initMazeSizes[0])][Integer.valueOf(initMazeSizes[1])];
         startPostion = new Position(Integer.valueOf(initMazeSizes[2]),Integer.valueOf(initMazeSizes[3]));
         goalPosition = new Position(Integer.valueOf(initMazeSizes[4]),Integer.valueOf(initMazeSizes[5]));
-        // The index of the first char of the maze
-
 
         // Make the map from the stringArr
         int indexInByteMaze = 12;
@@ -91,9 +89,12 @@ public class Maze implements Serializable
     }
 
     /*** Getters ***/
+
     public Position getStartPosition() {
         return new Position(startPostion);
     }
+
+
     public Position getGoalPosition(){
         return new Position(goalPosition);
     }
@@ -111,11 +112,17 @@ public class Maze implements Serializable
      *     			110110
      */
     public void print() {
+        System.out.println(toString());
+    }
+
+    public String toString() {
+        String ans = "";
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++)
-                System.out.print(map[i][j]);
-            System.out.println();
+                ans += map[i][j];
+            ans += "\n";
         }
+        return ans;
     }
 
 
@@ -245,28 +252,6 @@ public class Maze implements Serializable
         return true;
     }
 
-    public static void main(String[] args) {
-        char[][] map = {{'S','1','0','1','1'},
-                        {'0','1','1','0','1'},
-                        {'0','1','1','0','1'},
-                        {'0','0','0','0','1'},
-                        {'0','0','1','E','1'},
-                        {'0','0','0','1','1'}};
 
-
-        Maze maze;
-        Maze maze2;
-        MyMazeGenerator mg = new MyMazeGenerator();
-        try {
-            maze = mg.generate(1000,1000 );
-            //maze.print();
-            maze2 = new Maze(maze.toByteArray());
-            System.out.println(maze.equals(maze2));
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-
-
-    }
 }
 

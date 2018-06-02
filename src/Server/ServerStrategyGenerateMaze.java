@@ -11,6 +11,7 @@ import java.io.*;
 
 public class ServerStrategyGenerateMaze implements IServerStrategy{
 
+
     @Override
     public void serverStrategy(InputStream inFromClient, OutputStream outToClient) {
 
@@ -44,6 +45,8 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
                 System.out.println(e.getMessage());
                 e.printStackTrace();
             }
+            fromClient.close();
+            toClientObject.close();
 
         } catch (IOException e) {
             e.printStackTrace();
