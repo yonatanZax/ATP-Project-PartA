@@ -41,7 +41,7 @@ static { Configurations.run(); }
 
     private void runServer() {
         try {
-            System.out.println("Server: runServer");
+            //System.out.println("Server: runServer");
             ServerSocket server = new ServerSocket(port);
             server.setSoTimeout(listeningInterval);
             //LOG.info(String.format("Server started! (port: %s)", port));
@@ -49,7 +49,7 @@ static { Configurations.run(); }
                 try {
                     Socket clientSocket = server.accept(); // blocking call
                     //LOG.info(String.format("Client excepted: %s", clientSocket.toString()));
-                    System.out.println(String.format("Server: Client accepted: %s", clientSocket.toString()));
+                    //System.out.println(String.format("Server: Client accepted: %s", clientSocket.toString()));
                     threadPool.execute(()->{ handleClient(clientSocket);});
                     //handleClient(clientSocket);
 
@@ -67,8 +67,8 @@ static { Configurations.run(); }
         try {
             //LOG.debug("Client excepted!");
             //LOG.debug(String.format("Handling client with socket: %s", clientSocket.toString()));
-            System.out.println("Server - handleClient: Client accepted!");
-            System.out.println(String.format("Server - handleClient: Handling client with socket: %s", clientSocket.toString()));
+            //System.out.println("Server - handleClient: Client accepted!");
+            //System.out.println(String.format("Server - handleClient: Handling client with socket: %s", clientSocket.toString()));
             serverStrategy.serverStrategy(clientSocket.getInputStream(), clientSocket.getOutputStream());
             clientSocket.getInputStream().close();
             clientSocket.getOutputStream().close();
@@ -83,13 +83,5 @@ static { Configurations.run(); }
         stop = true;
     }
 
-    public static void main(String[] args) {
-
-        Server mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
-        mazeGeneratingServer.start();
-
-        //Server solveSolvableProblem = new Server(5401, 1000, new ServerStrategySolveSearchProblem());
-        //solveSolvableProblem.start();
-    }
 }
 

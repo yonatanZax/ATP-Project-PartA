@@ -13,7 +13,6 @@ public class MyDecompressorInputStream extends InputStream {
 
     @Override
     public int read(byte[] bytes) throws IOException{
-        System.out.println("MY DECOMPRESSED");
 
         int row_one = (byte)in.read();
         bytes[0] = (byte)row_one;

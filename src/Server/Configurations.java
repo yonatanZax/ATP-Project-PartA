@@ -58,8 +58,11 @@ public class Configurations {
 
             }
 
-            if (isNumeric(properties.getProperty("server_threadPoolSize")))
-                server_threadPoolSize = Integer.parseInt(properties.getProperty("server_threadPoolSize"));
+            if (isNumeric(properties.getProperty("server_threadPoolSize"))) {
+                int temp = Integer.parseInt(properties.getProperty("server_threadPoolSize"));
+                if (temp > 0)
+                    server_threadPoolSize = temp;
+            }
 
 
         } catch (IOException ex) {
