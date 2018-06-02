@@ -15,7 +15,7 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
     @Override
     public void serverStrategy(InputStream inFromClient, OutputStream outToClient) {
 
-        System.out.println("ServerStrategy: GenerateMaze");
+        //System.out.println("ServerStrategy: GenerateMaze");
         try {
             ObjectInputStream fromClient = new ObjectInputStream(inFromClient);
             ObjectOutputStream toClientObject = new ObjectOutputStream(outToClient);
@@ -25,11 +25,9 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
             int[] mazeDimensions;
             try {
                 mazeDimensions = (int[]) fromClient.readObject();
-                //MyMazeGenerator mg = new MyMazeGenerator();
                 IMazeGenerator mg = Configurations.getGenerators_mazeGenerator();
                 Maze maze = mg.generate(mazeDimensions[0], mazeDimensions[1]);
                 byte[] mazeByteArray = maze.toByteArray();
-                //toclientObject.writeObject(mazeByteArray);
                 toClient.write(mazeByteArray);
                 toClientObject.writeObject(byteOut.toByteArray());
                 toClientObject.flush();
@@ -47,6 +45,8 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
             }
             fromClient.close();
             toClientObject.close();
+            byteOut.close();
+            toClient.close();
 
         } catch (IOException e) {
             e.printStackTrace();

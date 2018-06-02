@@ -1,19 +1,20 @@
 package Server;
 
-import IO.MyCompressorOutputStream;
-import IO.MyDecompressorInputStream;
+import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
-import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.mazeGenerators.Position;
-import algorithms.search.BestFirstSearch;
-import algorithms.search.ISearchingAlgorithm;
-import algorithms.search.SearchableMaze;
-import algorithms.search.Solution;
+import algorithms.search.*;
+import sun.awt.Mutex;
 
 import java.io.*;
 
 public class ServerStrategySolveSearchProblem implements IServerStrategy {
 
+    private Mutex mutex;
+
+    public ServerStrategySolveSearchProblem(){
+        mutex = new Mutex();
+    }
 
     private static String tempDirectoryPath = System.getProperty("java.io.tmpdir");
     @Override
@@ -26,26 +27,36 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
             toClient.flush();
             try {
                 Maze maze = (Maze) fromClient.readObject();
-                String tempPath = tempDirectoryPath + "/maze" + maze.toString().hashCode();
+                String tempPath = tempDirectoryPath + "maze" + maze.toString().hashCode();
+                System.out.println(tempPath);
+                mutex.lock();
                 File f = new File(tempPath);
                 if(f.exists()){ // the file exists, we don't need to solve again. only take what exists.
+                    System.out.println("####### File Exists ######## ");
                     FileInputStream fin = new FileInputStream(tempPath);
                     ObjectInputStream oin = new ObjectInputStream(fin);
                     solution = (Solution) oin.readObject();
+                    System.out.println("#######solution is:#######\n" + solution+ "\n\n####################");
                     fin.close();
                     oin.close();
                 }
                 else{
+                    System.out.println("####### File NOT Exists ######## ");
+
                     SearchableMaze searchableMaze = new SearchableMaze(maze);
                     solution = Configurations.getAlgorithms_solveAlgorithm().solve(searchableMaze);
+                    System.out.println("#######solution is:#######\n" + solution+ "\n\n####################");
                     f.createNewFile();
                     FileOutputStream fout = new FileOutputStream(tempPath);
+                    fout.flush();
                     ObjectOutputStream oout = new ObjectOutputStream(fout);
+                    oout.flush();
                     oout.writeObject(solution);
                     oout.flush();
                     fout.close();
                     oout.close();
                 }
+                mutex.unlock();
                 toClient.writeObject(solution);
                 toClient.flush();
             }
@@ -65,7 +76,6 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
             e.printStackTrace();
         }
     }
-
 
 
 }

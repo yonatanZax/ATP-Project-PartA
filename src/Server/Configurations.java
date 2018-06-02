@@ -28,10 +28,7 @@ public class Configurations {
 
             String filename = "./Resources/config.properties";
             input = new FileInputStream(filename);
-            if(input==null){
-                System.out.println("Sorry, unable to find " + filename);
-                return;
-            }
+
 
             //load a properties file from class path, inside static method
             properties.load(input);
@@ -40,19 +37,25 @@ public class Configurations {
             switch (properties.getProperty("algorithms_solveAlgorithm")){
                 case "BFS":
                     algorithms_solveAlgorithm = new BreadthFirstSearch();
+                    break;
                 case "BestFirstSearch":
                     algorithms_solveAlgorithm = new BestFirstSearch();
+                    break;
                 case "DFS":
                     algorithms_solveAlgorithm = new DepthFirstSearch();
+                    break;
                 default:
                     algorithms_solveAlgorithm = new BreadthFirstSearch();
+                    break;
             }
 
             switch (properties.getProperty("algorithms_mazeGenerateAlgorithm")){
                 case "simpleMazeGenerator":
                     generators_mazeGenerator = new SimpleMazeGenerator();
+                    break;
                 case "myMazeGenerator":
                     generators_mazeGenerator = new MyMazeGenerator();
+                    break;
                 default:
                     generators_mazeGenerator = new MyMazeGenerator();
 
@@ -78,7 +81,7 @@ public class Configurations {
         }
     }
 
-    public static boolean isNumeric(String str)
+    private static boolean isNumeric(String str)
     {
         try
         {

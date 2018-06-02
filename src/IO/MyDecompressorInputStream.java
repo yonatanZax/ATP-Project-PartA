@@ -49,9 +49,9 @@ public class MyDecompressorInputStream extends InputStream {
                 limit = maxValues;
 
             for (int j = limit; j > 0; j--) {
-                    charAtInt = Math.min(limit,nextBinary.length());
-                    byte b = (byte) ((nextBinary.charAt(charAtInt - j) == '1') ? 1 : 0);
-                    bytes[curIndex++] = b;
+                charAtInt = Math.min(limit,nextBinary.length());
+                byte b = (byte) ((nextBinary.charAt(charAtInt - j) == '1') ? 1 : 0);
+                bytes[curIndex++] = b;
 
             }
             maxValues -= 8;
