@@ -15,13 +15,10 @@ import java.util.Properties;
 
 public class Configurations {
 
-    private static ISearchingAlgorithm algorithms_solveAlgorithm;
-    private static IMazeGenerator generators_mazeGenerator;
-    private static int server_threadPoolSize = 3;
-
+    private static Properties properties = new Properties();
 
     public static void run(){
-        Properties properties = new Properties();
+
         InputStream input = null;
 
         try {
@@ -32,41 +29,6 @@ public class Configurations {
 
             //load a properties file from class path, inside static method
             properties.load(input);
-
-
-            switch (properties.getProperty("algorithms_solveAlgorithm")){
-                case "BFS":
-                    algorithms_solveAlgorithm = new BreadthFirstSearch();
-                    break;
-                case "BestFirstSearch":
-                    algorithms_solveAlgorithm = new BestFirstSearch();
-                    break;
-                case "DFS":
-                    algorithms_solveAlgorithm = new DepthFirstSearch();
-                    break;
-                default:
-                    algorithms_solveAlgorithm = new BreadthFirstSearch();
-                    break;
-            }
-
-            switch (properties.getProperty("algorithms_mazeGenerateAlgorithm")){
-                case "simpleMazeGenerator":
-                    generators_mazeGenerator = new SimpleMazeGenerator();
-                    break;
-                case "myMazeGenerator":
-                    generators_mazeGenerator = new MyMazeGenerator();
-                    break;
-                default:
-                    generators_mazeGenerator = new MyMazeGenerator();
-
-            }
-
-            if (isNumeric(properties.getProperty("server_threadPoolSize"))) {
-                int temp = Integer.parseInt(properties.getProperty("server_threadPoolSize"));
-                if (temp > 0)
-                    server_threadPoolSize = temp;
-            }
-
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -95,14 +57,34 @@ public class Configurations {
     }
 
     public static ISearchingAlgorithm getAlgorithms_solveAlgorithm() {
-        return algorithms_solveAlgorithm;
+        switch (properties.getProperty("algorithms_solveAlgorithm")){
+            case "BFS":
+                return new BreadthFirstSearch();
+            case "BestFirstSearch":
+                return new BestFirstSearch();
+            case "DFS":
+                return new DepthFirstSearch();
+
+        }
+        return new BreadthFirstSearch();
     }
 
     public static IMazeGenerator getGenerators_mazeGenerator() {
-        return generators_mazeGenerator;
+        switch (properties.getProperty("algorithms_mazeGenerateAlgorithm")){
+            case "simpleMazeGenerator":
+                return new SimpleMazeGenerator();
+            case "myMazeGenerator":
+                return new MyMazeGenerator();
+        }
+        return new MyMazeGenerator();
     }
 
     public static int getServer_threadPoolSize() {
-        return server_threadPoolSize;
+        if (isNumeric(properties.getProperty("server_threadPoolSize"))) {
+            int temp = Integer.parseInt(properties.getProperty("server_threadPoolSize"));
+            if (temp > 0)
+                return temp;
+        }
+        return 3;
     }
 }

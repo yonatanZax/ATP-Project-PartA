@@ -38,8 +38,8 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
             catch (ArrayIndexOutOfBoundsException e){
                 System.out.println("Client should send 2 parameters of maze size: ServerStrategyGenerateMaze");
             }
-            catch (IOException e){
-                System.out.println("IOException in ServerStrategyGenerateMaze");
+            catch (Exception e){
+                System.out.println("Exception in ServerStrategyGenerateMaze");
                 System.out.println(e.getMessage());
                 e.printStackTrace();
             }

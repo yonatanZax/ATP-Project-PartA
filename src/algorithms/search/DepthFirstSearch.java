@@ -1,18 +1,10 @@
 package algorithms.search;
 
 
-import algorithms.mazeGenerators.Maze;
-import algorithms.mazeGenerators.Position;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
-/**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
- */
 
 public class DepthFirstSearch extends ASearchingAlgorithm
 {
