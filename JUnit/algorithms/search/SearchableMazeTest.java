@@ -26,7 +26,7 @@ class SearchableMazeTest {
 
         }
         ISearchable searchableMaze = new SearchableMaze(maze);
-        ArrayList<AState> list = searchableMaze.getAllPossibleStates(new MazeState(new Position(1,1,null)));
+        ArrayList<AState> list = searchableMaze.getAllPossibleStates(new MazeState(new Position(1,1,null),null));
         for (int i = 0; i < 3 ;i++) {
             String s = ((MazeState) list.get(i)).getPosition().toString();
             assertArrayEquals(check[i].toCharArray(), s.toCharArray());

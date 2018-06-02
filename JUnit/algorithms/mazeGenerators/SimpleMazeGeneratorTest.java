@@ -34,7 +34,7 @@ class SimpleMazeGeneratorTest {
         test = successes == rounds;
         if (test){
             System.out.println("SimpleGen RunTime test Passed!");
-            System.out.println("Avg RunTime: "+ avgTime/rounds + " Milisec.");
+            System.out.println("\t" +"Avg RunTime: "+ avgTime/rounds + " Milisec.");
         }
 
         assertTrue(test);
